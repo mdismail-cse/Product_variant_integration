@@ -1,0 +1,2 @@
+module AtributesHelper
+end
