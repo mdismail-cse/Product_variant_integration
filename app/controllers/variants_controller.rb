@@ -12,7 +12,12 @@ class VariantsController < ApplicationController
 
   # GET /variants/new
   def new
+    @pro = Product.find(params[:format])
+    @attributes = ProductAtribute.where(product_id: @pro.id)
+    # debugger
     @variant = Variant.new
+    @variant.variant_atr_values.build
+
   end
 
   # GET /variants/1/edit
@@ -23,8 +28,11 @@ class VariantsController < ApplicationController
   def create
     @variant = Variant.new(variant_params)
 
+    debugger
+
     respond_to do |format|
       if @variant.save
+
         format.html { redirect_to variant_url(@variant), notice: "Variant was successfully created." }
         format.json { render :show, status: :created, location: @variant }
       else
@@ -65,6 +73,17 @@ class VariantsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def variant_params
-      params.require(:variant).permit(:price, :stock, :product_id)
+      params.require(:variant).permit(:price, :stock, :product_id,variant_atr_values_attributes: [:atr_value_id])
     end
 end
+
+
+
+# variant_atr_values_params = params[:variant][:variant_atr_values_attributes]
+# if variant_atr_values_params.present?
+#   atr_value_ids = variant_atr_values_params.values.map { |attrs| attrs[:atr_value_id] }.flatten
+#
+#   atr_value_ids.each do |atr_value_id|
+#     @variant.variant_atr_values.create(atr_value_id: atr_value_id)
+#   end
+# end

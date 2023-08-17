@@ -22,9 +22,48 @@
   </div>
 
   <div class="my-5">
+    <% p = params[:format] %>
     <%= form.label :product_id %>
-    <%= form.text_field :product_id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.hidden_field :product_id, value: p %>
+    <p>Id : <%=  p %></p>
   </div>
+
+  <%# @attributes.each do |x| %>
+    <%# x = Atribute.find(x.atribute_id) %>
+<!--    <strong> <%#= x.title %></strong><br>-->
+
+    <%# @value = x.atr_values %>
+    <%# @value.each do |value| %>
+<!--      <p><%#= value.value %></p>-->
+      <%#end %>
+<!--    <br><br>-->
+
+  <%#end %>
+
+  <%= form.fields_for :variant_atr_values do |vr| %>
+    <% if @attributes.present? %>
+      <% @attributes.each do |x| %>
+        <% attribute = Atribute.find(x.atribute_id) %>
+        <strong><%= attribute.title %></strong><br>
+
+        <% @value = attribute.atr_values %>
+        <% @value.each do |value| %>
+          <%= vr.check_box :atr_value_id, { multiple: true }, value.id, nil %>
+          <%= value.value %><br>
+        <% end %>
+
+        <br><br>
+      <% end %>
+    <% else %>
+      <p>No attributes found for this product.</p>
+    <% end %>
+  <% end %>
+
+
+
+
+
+
 
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>

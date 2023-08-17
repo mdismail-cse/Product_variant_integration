@@ -1,7 +1,7 @@
 class VariantAtrValue < ApplicationRecord
 
-  validate :validate_atr_variant_presence, on: [:create, :update]
-  validate :validate_variant_product_and_attribute, on: [:create,:update]
+  # validate :validate_atr_variant_presence, on: [:create, :update]
+  # validate :validate_variant_product_and_attribute, on: [:create,:update]
 
   belongs_to :variant
   belongs_to :atr_value

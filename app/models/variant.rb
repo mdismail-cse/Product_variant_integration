@@ -7,4 +7,8 @@ class Variant < ApplicationRecord
 
   has_many :variant_atr_values
   has_many :atr_values, through: :variant_atr_values
+
+
+  accepts_nested_attributes_for :variant_atr_values, allow_destroy: true
+
 end

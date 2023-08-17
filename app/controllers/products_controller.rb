@@ -13,6 +13,9 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
+    @product.product_atributes.build
+    # product_attribute.atribute_ids = []
+
   end
 
   # GET /products/1/edit
@@ -22,16 +25,30 @@ class ProductsController < ApplicationController
   # POST /products or /products.json
   def create
     @product = Product.new(product_params)
-
+    # debugger
     respond_to do |format|
       if @product.save
-        format.html { redirect_to product_url(@product), notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @product }
+
+        product_attribute_params = params[:product][:product_atributes_attributes]
+        if product_attribute_params.present?
+          atribute_ids = product_attribute_params.values.map { |attrs| attrs[:atribute_id] }.flatten
+
+          atribute_ids.each do |atribute_id|
+            @product.product_atributes.create(atribute_id: atribute_id)
+          end
+        end
+
+        format.html { redirect_to new_variant_url(@product), notice: "Product was successfully created." }
+        # format.json { render :'variants/new', status: :created, location: @product }
+
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
+
+
+
   end
 
   # PATCH/PUT /products/1 or /products/1.json
@@ -65,6 +82,6 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:name, :details)
+      params.require(:product).permit(:name, :details, variant_atr_values_attributes: [:atr_value_id])
     end
 end

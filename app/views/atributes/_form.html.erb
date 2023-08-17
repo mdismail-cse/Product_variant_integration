@@ -1,3 +1,54 @@
+
+<%#= form_with(model: atribute, class: "contents") do |form| %>
+  <%# if atribute.errors.any? %>
+<!--    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">-->
+<!--      <h2><%#= pluralize(atribute.errors.count, "error") %> prohibited this atribute from being saved:</h2>-->
+
+<!--      <ul>-->
+        <%# atribute.errors.each do |error| %>
+<!--          <li><%#= error.full_message %></li>-->
+        <%# end %>
+<!--      </ul>-->
+<!--    </div>-->
+  <%# end %>
+
+<!--  <div class="my-5">-->
+    <%#= form.label :title %>
+    <%#= form.text_field :title, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+<!--  </div>-->
+
+
+
+
+
+<!--  <h3>Enter Attribute Value</h3>-->
+  <%#= form.fields_for :atr_values do |atr| %>
+<!--    <div class="my-5">-->
+      <%#= atr.label :value %>
+      <%#= atr.text_field :value, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+<!--    </div>-->
+  <%# end %>
+
+
+
+<!--  <div class="inline">-->
+    <%#= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+<!--  </div>-->
+<%# end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <%= form_with(model: atribute, class: "contents") do |form| %>
   <% if atribute.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
@@ -16,7 +67,91 @@
     <%= form.text_field :title, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
 
+  <h3>Enter Attribute Value</h3>
+  <%= form.fields_for :atr_values do |atr| %>
+    <div class="my-5">
+      <%= atr.label :value %>
+      <%= atr.text_field :value, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    </div>
+  <% end %>
+
+  <div id="atr-values-container" data-atr-container>
+    <!-- Existing attribute value fields will be added here -->
+  </div>
+
+  <button type="button" id="add-value-button" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+    Add Another Value
+  </button>
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
 <% end %>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const addButton = document.getElementById("add-value-button");
+        const atrContainer = document.getElementById("atr-values-container");
+        let valueCount = <%= atribute.atr_values.size %>; // Initialize with existing values count
+
+        addButton.addEventListener("click", () => {
+            const newAtrField = document.createElement("div");
+            newAtrField.classList.add("my-5");
+
+            const label = document.createElement("label");
+            label.textContent = "Value " + (valueCount + 1);
+            newAtrField.appendChild(label);
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = `atribute[atr_values_attributes][${valueCount}][value]`;
+            input.classList.add("block", "shadow", "rounded-md", "border", "border-gray-200", "outline-none", "px-3", "py-2", "mt-2", "w-full");
+            newAtrField.appendChild(input);
+
+            atrContainer.appendChild(newAtrField);
+
+            valueCount++;
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

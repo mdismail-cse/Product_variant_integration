@@ -13,6 +13,7 @@ class AtributesController < ApplicationController
   # GET /atributes/new
   def new
     @atribute = Atribute.new
+    @atribute.atr_values.build
   end
 
   # GET /atributes/1/edit
@@ -23,7 +24,7 @@ class AtributesController < ApplicationController
   def create
 
     @atribute = Atribute.new(atribute_params)
-
+    debugger
     respond_to do |format|
       if @atribute.save
         format.html { redirect_to atribute_url(@atribute), notice: "Atribute was successfully created." }
@@ -66,6 +67,6 @@ class AtributesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def atribute_params
-      params.require(:atribute).permit(:title)
+      params.require(:atribute).permit(:title, atr_values_attributes:[:value])
     end
 end
