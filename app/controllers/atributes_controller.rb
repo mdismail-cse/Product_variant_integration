@@ -67,6 +67,6 @@ class AtributesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def atribute_params
-      params.require(:atribute).permit(:title, atr_values_attributes:[:value])
+      params.require(:atribute).permit(:title, atr_values_attributes:[:id , :value])
     end
 end

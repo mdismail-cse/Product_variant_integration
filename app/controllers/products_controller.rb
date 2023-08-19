@@ -14,6 +14,7 @@ class ProductsController < ApplicationController
   def new
     @product = Product.new
     @product.product_atributes.build
+    @product.variants.build
     # product_attribute.atribute_ids = []
 
   end
@@ -82,6 +83,6 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:name, :details, variant_atr_values_attributes: [:atr_value_id])
+      params.require(:product).permit(:name, :details, variant_atr_values_attributes: [:id, :atr_value_id], variants_attributes:[:price, :stock])
     end
 end

@@ -8,7 +8,21 @@
     <%= link_to 'New atribute', new_atribute_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
 
-  <div id="atributes" class="min-w-full">
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full mt-5">
+      <thead>
+      <tr>
+        <th class="px-4 py-2 border">Attribute type</th>
+        <th class="px-4 py-2 border">Action</th>
+<!--        <th class="px-4 py-2 border">Stock</th>-->
+<!--        <th class="px-4 py-2 border">Specification</th>-->
+      </tr>
+      </thead>
+      <tbody>
+
     <%= render @atributes %>
+
+      </tbody>
+    </table>
   </div>
 </div>

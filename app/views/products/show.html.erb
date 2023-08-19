@@ -1,4 +1,6 @@
-<div class="mx-auto md:w-2/3 w-full flex">
+
+
+<div class="mx-auto md:w-2/3 w-full">
   <div class="mx-auto">
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
@@ -12,4 +14,42 @@
     </div>
     <%= link_to 'Back to products', products_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   </div>
+
+  <br>
+
+  <% variant = @product.variants %>
+
+  <% if variant.present? %>
+    <h1 class="text-2xl font-bold mb-4">Variants</h1>
+
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full mt-5">
+        <thead>
+        <tr>
+          <th class="px-4 py-2 border">Product Name</th>
+          <th class="px-4 py-2 border">Price</th>
+          <th class="px-4 py-2 border">Stock</th>
+          <th class="px-4 py-2 border">Specification</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% variant.each do |v| %>
+          <% variant_value = v.atr_values %>
+          <tr>
+            <td class="px-4 py-2 border border-gray-300"><%= @product.name %></td>
+            <td class="px-4 py-2 border border-gray-300"><%= v.price %></td>
+            <td class="px-4 py-2 border border-gray-300"><%= v.stock %></td>
+            <td class="px-4 py-2 border border-gray-300">
+            <% variant_value.each do |vv| %>
+                <%= vv.value %>
+            <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <strong class="block mt-4">Variant not present</strong>
+  <% end %>
 </div>

@@ -12,16 +12,6 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.label :price %>
-    <%= form.number_field :price, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :stock %>
-    <%= form.number_field :stock, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
     <% p = params[:format] %>
     <%= form.label :product_id %>
     <%= form.hidden_field :product_id, value: p %>
@@ -40,27 +30,62 @@
 
   <%#end %>
 
-  <%= form.fields_for :variant_atr_values do |vr| %>
-    <% if @attributes.present? %>
-      <% @attributes.each do |x| %>
-        <% attribute = Atribute.find(x.atribute_id) %>
-        <strong><%= attribute.title %></strong><br>
 
-        <% @value = attribute.atr_values %>
-        <% @value.each do |value| %>
-          <%= vr.check_box :atr_value_id, { multiple: true }, value.id, nil %>
-          <%= value.value %><br>
-        <% end %>
+  <!-- this form field for the variant atribute show  -->
 
-        <br><br>
-      <% end %>
-    <% else %>
-      <p>No attributes found for this product.</p>
+  <%#= form.fields_for :variant_atr_values do |vr| %>
+    <%# if @attributes.present? %>
+      <%# @attributes.each do |x| %>
+        <%# attribute = Atribute.find(x.atribute_id) %>
+<!--        <strong><%#= attribute.title %></strong><br>-->
+
+        <%# @value = attribute.atr_values %>
+        <%# @value.each do |value| %>
+          <%#= vr.check_box :atr_value_id, { multiple: true }, value.id, nil %>
+<!--          <%#= value.value %><br>-->
+        <%# end %>
+
+<!--        <br><br>-->
+      <%# end %>
+    <%# else %>
+<!--      <p>No attributes found for this product.</p>-->
+    <%# end %>
+  <%# end %>
+
+
+
+
+
+  <% @combinations.each do |x| %>
+    <strong><%= x %></strong>
+    <div class="my-5">
+      <%= form.label :price %>
+      <%= form.number_field :price, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    <div class="my-5">
+      <%= form.label :stock %>
+      <%= form.number_field :stock, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    </div>
+    <% arr = [] %>
+
+    <% x.each do |find_value| %>
+      <% arr_id = AtrValue.find_by(value: find_value)&.id %>
+      <% arr << arr_id %>
     <% end %>
-  <% end %>
+
+    <%= arr %>
+
+    <%= form.fields_for :variant_atr_values do |vr| %>
+
+      <% arr.each do |value_id| %>
+        <%= vr.hidden_field :atr_value_id, value: value_id %>
+      <% end %>
 
 
+      <% end %>
 
+  <%end %>
 
 
 

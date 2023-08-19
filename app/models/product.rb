@@ -6,8 +6,7 @@ class Product < ApplicationRecord
 
 
   accepts_nested_attributes_for :product_atributes, allow_destroy: true
-
-
+  accepts_nested_attributes_for :variants, allow_destroy: true
 
 
 end

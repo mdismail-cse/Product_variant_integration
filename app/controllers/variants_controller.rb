@@ -12,9 +12,17 @@ class VariantsController < ApplicationController
 
   # GET /variants/new
   def new
+
     @pro = Product.find(params[:format])
-    @attributes = ProductAtribute.where(product_id: @pro.id)
-    # debugger
+    @attributes = ProductAtribute.where(product_id: @pro.id) || []
+    selected_atrs = Atribute.includes(:atr_values).where(id: @attributes.pluck(:atribute_id)).all
+
+    @combinations = generate_all_combinations(selected_atrs)
+
+    @atrs = Atribute.all
+
+
+
     @variant = Variant.new
     @variant.variant_atr_values.build
 
@@ -27,11 +35,17 @@ class VariantsController < ApplicationController
   # POST /variants or /variants.json
   def create
     @variant = Variant.new(variant_params)
-
     debugger
-
     respond_to do |format|
       if @variant.save
+        variant_atr_values_params = params[:variant][:variant_atr_values_attributes]
+
+        if variant_atr_values_params.present?
+          atr_value_ids = variant_atr_values_params.values.map { |attrs| attrs[:atr_value_id] }.flatten
+          atr_value_ids.each do |atr_value_id|
+            @variant.variant_atr_values.create(atr_value_id: atr_value_id)
+          end
+        end
 
         format.html { redirect_to variant_url(@variant), notice: "Variant was successfully created." }
         format.json { render :show, status: :created, location: @variant }
@@ -41,6 +55,7 @@ class VariantsController < ApplicationController
       end
     end
   end
+
 
   # PATCH/PUT /variants/1 or /variants/1.json
   def update
@@ -75,6 +90,27 @@ class VariantsController < ApplicationController
     def variant_params
       params.require(:variant).permit(:price, :stock, :product_id,variant_atr_values_attributes: [:atr_value_id])
     end
+
+  def generate_all_combinations(atrs)
+    combinations = [[]]
+
+    atrs.each do |atr|
+      atr_values = atr.atr_values.map(&:value)
+      new_combinations = []
+
+      combinations.each do |combination|
+        atr_values.each do |atr_value|
+          new_combinations << combination + [atr_value]
+        end
+      end
+
+      combinations = new_combinations
+    end
+
+    combinations
+  end
+
+
 end
 
 
