@@ -35,22 +35,16 @@ class VariantsController < ApplicationController
   # POST /variants or /variants.json
   def create
     @variant = Variant.new(variant_params)
+
     debugger
     respond_to do |format|
       if @variant.save
-        variant_atr_values_params = params[:variant][:variant_atr_values_attributes]
 
-        if variant_atr_values_params.present?
-          atr_value_ids = variant_atr_values_params.values.map { |attrs| attrs[:atr_value_id] }.flatten
-          atr_value_ids.each do |atr_value_id|
-            @variant.variant_atr_values.create(atr_value_id: atr_value_id)
-          end
-        end
 
         format.html { redirect_to variant_url(@variant), notice: "Variant was successfully created." }
         format.json { render :show, status: :created, location: @variant }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, @combinations => @combinations, status: :unprocessable_entity }
         format.json { render json: @variant.errors, status: :unprocessable_entity }
       end
     end
@@ -62,7 +56,7 @@ class VariantsController < ApplicationController
     respond_to do |format|
       if @variant.update(variant_params)
         format.html { redirect_to variant_url(@variant), notice: "Variant was successfully updated." }
-        format.json { render :show, status: :ok, location: @variant }
+        format.json { render :index, status: :ok, location: @variant }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @variant.errors, status: :unprocessable_entity }
@@ -88,7 +82,7 @@ class VariantsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def variant_params
-      params.require(:variant).permit(:price, :stock, :product_id,variant_atr_values_attributes: [:atr_value_id])
+      params.require(:variant).permit(:price, :stock, :product_id,variant_atr_values_attributes: [ :id, :atr_value_id])
     end
 
   def generate_all_combinations(atrs)
@@ -122,4 +116,20 @@ end
 #   atr_value_ids.each do |atr_value_id|
 #     @variant.variant_atr_values.create(atr_value_id: atr_value_id)
 #   end
+# end
+
+
+
+
+# variant_atr_values_params = params[:variant_atr_values_attributes]
+#
+# if variant_atr_values_params.present?
+#   variant_atr_values_params.each do |key, value|
+#     atr_value_ids = value[:atr_value_id].split(' ').map(&:to_i)
+#
+#     atr_value_ids.each do |atr_value_id|
+#       @variant.variant_atr_values.build(atr_value_id: atr_value_id)
+#     end
+#   end
+#   @variant.save # Save the variant with associated records
 # end
