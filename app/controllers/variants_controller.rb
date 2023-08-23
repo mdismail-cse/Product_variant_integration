@@ -13,8 +13,8 @@ class VariantsController < ApplicationController
   # GET /variants/new
   def new
 
-    @pro = Product.find(params[:format])
-    @attributes = ProductAtribute.where(product_id: @pro.id) || []
+    @product = Product.find(params[:format])
+    @attributes = ProductAtribute.where(product_id: @product.id) || []
     selected_atrs = Atribute.includes(:atr_values).where(id: @attributes.pluck(:atribute_id)).all
 
     @combinations = generate_all_combinations(selected_atrs)
@@ -36,7 +36,7 @@ class VariantsController < ApplicationController
   def create
     @variant = Variant.new(variant_params)
 
-    debugger
+    # debugger
     respond_to do |format|
       if @variant.save
 

@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
     # debugger
     respond_to do |format|
       if @product.save
-        debugger
+
         product_attribute_params = params[:product][:product_atributes_attributes]
         if product_attribute_params.present?
           atribute_ids = product_attribute_params.values.map { |attrs| attrs[:atribute_id] }.flatten
@@ -38,8 +38,7 @@ class ProductsController < ApplicationController
             @product.product_atributes.create(atribute_id: atribute_id)
           end
         end
-        @atribute = params[]
-        format.html { redirect_to edit_product_url(@product), notice: "Product was successfully created." }
+        format.html { redirect_to new_variant_url(@product), notice: "Product was successfully created." }
         # format.json { render :'variants/new', status: :created, location: @product }
 
 
@@ -75,6 +74,9 @@ class ProductsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
